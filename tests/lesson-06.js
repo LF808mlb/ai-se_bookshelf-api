@@ -1,8 +1,19 @@
-import Book from '../src/models/book.ts';
-import Review from '../src/models/review.ts';
 
+let Book;
+let Review;
 let pass = 0;
 let fail = 0;
+
+async function loadModels() {
+  try {
+    const b = await import('../src/models/book.js');
+    const r = await import('../src/models/review.js');
+    Book = b.default;
+    Review = r.default;
+  } catch (error) {
+    throw new Error('Failed to load models');
+  }
+}
 
 function test(label, fn) {
   try {
@@ -33,6 +44,12 @@ console.log('\nLesson 06: Building Your First Models\n');
 
 // ── Review model ──────────────────────────────────────────────────────────────
 
+await loadModels();
+
+test('Review - model is defined', () => {
+  if (typeof Review !== 'function') throw new Error('Exported Review model is invalid');
+});
+
 test('Review — text is required', () => {
   expectError(new Review({ rating: 4 }), 'text');
 });
@@ -55,6 +72,9 @@ test('Review — valid document passes validation', () => {
 });
 
 // ── Book model ────────────────────────────────────────────────────────────────
+test('Book model is defined', () => {
+  if (typeof Book !== 'function') throw new Error('Exported Book model is invalid');
+});
 
 test('Book — title is required', () => {
   expectError(new Book({ genre: 'fiction' }), 'title');
@@ -94,6 +114,7 @@ test('Book — tags is an array', () => {
 });
 
 console.log(`\n${pass} passed, ${fail} failed`);
+
 if (fail === 0) {
   const code = Buffer.from('cGsyLXJqeXQ=', 'base64').toString();
   console.log(`\nVerification code: ${code}`);
