@@ -1,9 +1,11 @@
+import { isValidObjectId } from 'mongoose';
+
 const BASE = 'http://localhost:3000';
 let pass = 0;
 let fail = 0;
 let skip = 0;
 
-class Skip extends Error {}
+class Skip extends Error { }
 
 async function test(label, fn) {
   try {
@@ -31,6 +33,10 @@ function expect(value, label) {
       if (!value)
         throw new Error(`${label}: expected truthy, got ${String(value)}`);
     },
+    toBeDefined() {
+      if (value === undefined)
+        throw new Error(`${label}: expected defined, got ${String(value)}`);
+    },
   };
 }
 
@@ -38,6 +44,15 @@ async function run() {
   console.log('\nLesson 08: CRUD Operations — Bookshelf API\n');
 
   let bookId;
+
+  await test('Server is running on port 3000', async () => {
+    try {
+      const res = await fetch(`${BASE}`);
+      expect(res).toBeDefined();
+    } catch (error) {
+      throw new Error('Failed to connect');
+    }
+  });
 
   await test('POST /books — creates a book with 201 status', async () => {
     const res = await fetch(`${BASE}/books`, {
@@ -49,6 +64,7 @@ async function run() {
     const body = await res.json();
     expect(typeof body._id, '_id type').toBe('string');
     expect(body.title, 'title').toBe('Dune');
+    expect(isValidObjectId(body._id), '_id is a valid ObjectId').toBeTrue();
     bookId = body._id;
   });
 
