@@ -1,5 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import bookRoutes from './routes/books.js';
 
 const app = express();
 const PORT = 3000;
