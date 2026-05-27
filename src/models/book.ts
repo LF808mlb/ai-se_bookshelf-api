@@ -17,9 +17,13 @@ const bookSchema = new mongoose.Schema({
     required: false,
   },
   tags: {
-  type: [{ type: String, minlength: 2, maxlength: 20 }],
-  required: false,
-}
+    type: [{ type: String, minlength: 2, maxlength: 20 }],
+    required: false,
+  },
+  reviews: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Review',
+  }],
 });
 
 const Book = mongoose.model('Book', bookSchema);
