@@ -1,3 +1,8 @@
+
+import type { Request, Response } from 'express';
+import mongoose from 'mongoose';
+import Review from '../models/review.js';
+
 export const getReviews = async (req: Request, res: Response) => {
 	try {
 		const reviews = await Review.find().populate('book');
@@ -6,9 +11,6 @@ export const getReviews = async (req: Request, res: Response) => {
 		res.status(500).send({ message: 'Server error' });
 	}
 };
-import type { Request, Response } from 'express';
-import mongoose from 'mongoose';
-import Review from '../models/review.js';
 
 export const createReview = async (req: Request, res: Response) => {
 	const { text, rating, bookId } = req.body;
