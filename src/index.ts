@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import bookRoutes from './routes/books.js';
+import reviewsRouter from './routes/reviews.js';
 
 const app = express();
 const PORT = 3000;
@@ -10,7 +11,9 @@ mongoose.connect('mongodb://127.0.0.1:27017/bookshelfdb')
   .catch((err) => console.error('Connection error', err));
   
 app.use(express.json());
+
 app.use('/books', bookRoutes);
+app.use('/reviews', reviewsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
