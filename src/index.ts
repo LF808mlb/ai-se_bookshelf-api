@@ -10,6 +10,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/bookshelfdb')
   .catch((err) => console.error('Connection error', err));
   
 app.use(express.json());
+app.use('/books', bookRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
